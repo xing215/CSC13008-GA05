@@ -23,6 +23,7 @@ const ShippingForm = () => {
         handleShippingSubmit,
         submittedData,
         handleAutoFillAddress,
+        validationPatterns,
         isLoadingAddress,
         provinces,
         wards,
@@ -52,6 +53,7 @@ const ShippingForm = () => {
                             type="text"
                             {...register("fullName", {
                                 required: "Full Name is required",
+                                pattern: validationPatterns.name,
                             })}
                             className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                             placeholder="e.g. John Doe"
@@ -64,6 +66,7 @@ const ShippingForm = () => {
                             type="text"
                             {...register("email", {
                                 required: "Email is required",
+                                pattern: validationPatterns.email,
                             })}
                             className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                             placeholder="e.g. john@example.com"
@@ -76,6 +79,7 @@ const ShippingForm = () => {
                             type="text"
                             {...register("phone", {
                                 required: "Phone Number is required",
+                                pattern: validationPatterns.phone,
                             })}
                             className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                             placeholder="e.g. +84 901234567"

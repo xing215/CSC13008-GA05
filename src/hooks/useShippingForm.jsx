@@ -13,6 +13,7 @@ export const useShippingForm = () => {
         reset,
         formState: { errors },
     } = useForm({
+        mode: "onBlur",
         defaultValues: {
             fullName: "",
             email: "",
@@ -29,6 +30,23 @@ export const useShippingForm = () => {
 
     const [provinces, setProvinces] = useState([]);
     const [wards, setWards] = useState([]);
+
+    // Validation patterns for form fields 
+    const validationPatterns = {
+        name: {
+            value: /^[\p{L}\s]+$/u, 
+            message: "Invalid name. Use letters only",
+        },
+        email: {
+            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            message: "Invalid email address",
+        },
+        phone: {
+            value: /^(?:\+84|0)(3|5|7|8|9)[0-9]{8}$/,
+            message: "Invalid phone number. Ex: +84901234567 or 0912345678",
+        },
+    };
+
 
     // Load from localStorage on mount
     useEffect(() => {
@@ -119,6 +137,7 @@ export const useShippingForm = () => {
         submittedData,
         handleShippingSubmit: handleSubmit(onSubmitLogic),
         handleAutoFillAddress,
+        validationPatterns,
         isLoadingAddress,
         provinces,
         wards,
