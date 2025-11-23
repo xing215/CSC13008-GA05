@@ -2,12 +2,15 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { getProvinces, getWardsByProvinceCode } from "../services/addressService";
 
+const STORAGE_KEY = 'shippingFormData';
+
 export const useShippingForm = () => {
     const {
         register,
         handleSubmit,
         watch,
         setValue,
+        reset,
         formState: { errors },
     } = useForm({
         defaultValues: {
@@ -27,6 +30,20 @@ export const useShippingForm = () => {
     const [provinces, setProvinces] = useState([]);
     const [wards, setWards] = useState([]);
 
+    // Load from localStorage on mount
+    useEffect(() => {
+        const savedData = localStorage.getItem(STORAGE_KEY);
+        if (savedData) {
+            try {
+                const parsedData = JSON.parse(savedData);
+                reset(parsedData);
+                console.log('Loaded saved data:', parsedData);
+            } catch (error) {
+                console.error('Error loading saved form data:', error);
+            }
+        }
+    }, [reset]);
+
     useEffect(() => {
         const data = getProvinces();
         setProvinces(data);
@@ -45,6 +62,21 @@ export const useShippingForm = () => {
         }
     }, [selectedCityCode, setValue]);
 
+    // Watch all form values for autosave
+    const watchedValues = watch();
+
+    useEffect(() => {
+        if (!submittedData) {
+            const hasData = Object.values(watchedValues).some(value => value !== "");
+            if (hasData) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(watchedValues));
+                console.log('Saved data:', watchedValues);
+            } else {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        }
+    }, [watchedValues, submittedData]);
+
     const handleAutoFillAddress = async (houseInput) => {
         if (!houseInput) return;
         setIsLoadingAddress(true);
@@ -59,6 +91,8 @@ export const useShippingForm = () => {
 
     const onSubmitLogic = (data) => {
         setSubmittedData(data);
+        localStorage.removeItem(STORAGE_KEY);
+        reset();
     };
 
     return {
