@@ -1,5 +1,6 @@
 import React from "react";
 import { useShippingForm } from "./hooks/useShippingForm";
+import { getProvinceName, getWardName } from "./services/addressService";
 
 const ShippingForm = () => {
     const {
@@ -9,6 +10,8 @@ const ShippingForm = () => {
         submittedData,
         handleAutoFillAddress,
         isLoadingAddress,
+        provinces,
+        wards,
     } = useShippingForm();
 
     const FormRow = ({ label, error, children }) => (
@@ -123,11 +126,11 @@ const ShippingForm = () => {
                                         className="w-full px-4 py-3 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
                                     >
                                         <option value="">Choose a city</option>
-                                        <option value="hcm">
-                                            Ho Chi Minh City
-                                        </option>
-                                        <option value="hn">Hanoi</option>
-                                        <option value="dn">Da Nang</option>
+                                        {provinces.map((province) => (
+                                            <option key={province.code} value={province.code}>
+                                                {province.name_with_type}
+                                            </option>
+                                        ))}
                                     </select>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
                                         <svg
@@ -150,11 +153,11 @@ const ShippingForm = () => {
                                         className="w-full px-4 py-3 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
                                     >
                                         <option value="">Choose a ward</option>
-                                        <option value="cho_quan">
-                                            Cho Quan Ward
-                                        </option>
-                                        <option value="ward_1">Ward 1</option>
-                                        <option value="ward_2">Ward 2</option>
+                                        {wards.map((ward) => (
+                                            <option key={ward.code} value={ward.code}>
+                                                {ward.name_with_type}
+                                            </option>
+                                        ))}
                                     </select>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
                                         <svg
@@ -226,7 +229,7 @@ const ShippingForm = () => {
                                     Location:
                                 </span>
                                 <span className="uppercase">
-                                    {submittedData.ward} - {submittedData.city}
+                                    {getWardName(submittedData.ward)} - {getProvinceName(submittedData.city)}
                                 </span>
                             </div>
                         </div>
