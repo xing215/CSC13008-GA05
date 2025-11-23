@@ -92,7 +92,25 @@ export const useShippingForm = () => {
     const onSubmitLogic = (data) => {
         setSubmittedData(data);
         localStorage.removeItem(STORAGE_KEY);
-        reset();
+        setValue("fullName", "");
+        setValue("email", "");
+        setValue("phone", "");
+        setValue("houseNumber", "");
+        setValue("street", "");
+        setValue("city", "");
+        setValue("ward", "");
+    };
+
+    const handleClear = () => {
+        setValue("fullName", "");
+        setValue("email", "");
+        setValue("phone", "");
+        setValue("houseNumber", "");
+        setValue("street", "");
+        setValue("city", "");
+        setValue("ward", "");
+        localStorage.removeItem(STORAGE_KEY);
+        setSubmittedData(null);
     };
 
     return {
@@ -104,5 +122,7 @@ export const useShippingForm = () => {
         isLoadingAddress,
         provinces,
         wards,
+        handleClear,
+        watch,
     };
 };

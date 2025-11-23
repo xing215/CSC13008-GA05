@@ -26,7 +26,12 @@ const ShippingForm = () => {
         isLoadingAddress,
         provinces,
         wards,
+        handleClear,
+        watch,
     } = useShippingForm();
+
+    const watchedValues = watch();
+    const hasData = Object.values(watchedValues).some(value => value !== "");
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
@@ -34,6 +39,11 @@ const ShippingForm = () => {
                 <h2 className="font-bold mb-6 text-center text-blue-600 text-2xl">
                     Enhanced Shipping Form
                 </h2>
+                {hasData && (
+                    <p className="text-center italic text-gray-500 cursor-pointer mb-4" onClick={handleClear}>
+                        Clear input
+                    </p>
+                )}
 
                 <form onSubmit={handleShippingSubmit} className="space-y-6">
                     {/* Full Name */}
