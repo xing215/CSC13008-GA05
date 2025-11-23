@@ -2,6 +2,20 @@ import React from "react";
 import { useShippingForm } from "./hooks/useShippingForm";
 import { getProvinceName, getWardName } from "./services/addressService";
 
+const FormRow = ({ label, error, children }) => (
+    <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-6">
+        <label className="w-full md:w-1/4 text-base font-bold text-gray-700 pt-3">
+            {label}
+        </label>
+        <div className="w-full md:w-3/4">
+            {children}
+            {error && (
+                <p className="text-red-500 text-sm mt-1">{error.message}</p>
+            )}
+        </div>
+    </div>
+);
+
 const ShippingForm = () => {
     const {
         register,
@@ -13,20 +27,6 @@ const ShippingForm = () => {
         provinces,
         wards,
     } = useShippingForm();
-
-    const FormRow = ({ label, error, children }) => (
-        <div className="flex flex-col md:flex-row md:items-start gap-2 md:gap-6">
-            <label className="w-full md:w-1/4 text-base font-bold text-gray-700 pt-3">
-                {label}
-            </label>
-            <div className="w-full md:w-3/4">
-                {children}
-                {error && (
-                    <p className="text-red-500 text-sm mt-1">{error.message}</p>
-                )}
-            </div>
-        </div>
-    );
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
