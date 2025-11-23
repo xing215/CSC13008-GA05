@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { getProvinces, getWardsByProvinceCode } from "../services/addressService";
 
 export const useShippingForm = () => {
     const {
         register,
         handleSubmit,
+        watch,
         setValue,
         formState: { errors },
     } = useForm({
@@ -21,6 +23,27 @@ export const useShippingForm = () => {
 
     const [submittedData, setSubmittedData] = useState(null);
     const [isLoadingAddress, setIsLoadingAddress] = useState(false);
+
+    const [provinces, setProvinces] = useState([]);
+    const [wards, setWards] = useState([]);
+
+    useEffect(() => {
+        const data = getProvinces();
+        setProvinces(data);
+    }, []);
+
+    const selectedCityCode = watch("city");
+
+    useEffect(() => {
+        if (selectedCityCode) {
+            const filteredWards = getWardsByProvinceCode(selectedCityCode);
+            setWards(filteredWards);
+            
+            setValue("ward", ""); 
+        } else {
+            setWards([]);
+        }
+    }, [selectedCityCode, setValue]);
 
     const handleAutoFillAddress = async (houseInput) => {
         if (!houseInput) return;
@@ -45,5 +68,7 @@ export const useShippingForm = () => {
         handleShippingSubmit: handleSubmit(onSubmitLogic),
         handleAutoFillAddress,
         isLoadingAddress,
+        provinces,
+        wards,
     };
 };
