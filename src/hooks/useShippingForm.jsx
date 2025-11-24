@@ -92,7 +92,13 @@ export const useShippingForm = () => {
     const onSubmitLogic = (data) => {
         setSubmittedData(data);
         localStorage.removeItem(STORAGE_KEY);
-        // Keep the form filled with submitted data instead of clearing
+        setValue("fullName", "");
+        setValue("email", "");
+        setValue("phone", "");
+        setValue("houseNumber", "");
+        setValue("street", "");
+        setValue("city", "");
+        setValue("ward", "");
     };
 
     const handleClear = () => {
