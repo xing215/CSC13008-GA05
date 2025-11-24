@@ -33,6 +33,7 @@ const ShippingForm = () => {
 
     const watchedValues = watch();
     const hasData = Object.values(watchedValues).some(value => value !== "");
+    const selectedCity = watch("city");
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
@@ -164,9 +165,10 @@ const ShippingForm = () => {
                                         {...register("ward", {
                                             required: true,
                                         })}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer"
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        disabled={!selectedCity}
                                     >
-                                        <option value="">Choose a ward</option>
+                                        <option value="">{!selectedCity ? "Please select a city first" : "Choose a ward"}</option>
                                         {wards.map((ward) => (
                                             <option key={ward.code} value={ward.code}>
                                                 {ward.name_with_type}
@@ -242,7 +244,7 @@ const ShippingForm = () => {
                                 <span className="font-bold w-32 shrink-0">
                                     Location:
                                 </span>
-                                <span className="uppercase">
+                                <span>
                                     {getWardName(submittedData.ward)} - {getProvinceName(submittedData.city)}
                                 </span>
                             </div>
